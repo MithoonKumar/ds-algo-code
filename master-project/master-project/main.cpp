@@ -14,6 +14,7 @@
 #include<stdio.h>
 using namespace std;
 
+bool matrix[100][100];
 
 int main(){
     freopen("/Users/mithoonkumar/Documents/ds-algo-code/ds-algo-code/master-project/master-project/input.txt","r",stdin);
