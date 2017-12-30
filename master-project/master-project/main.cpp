@@ -39,7 +39,7 @@ int main(){
         }
         for(int i=dayHash[str];i<(n%28)+dayHash[str];i++)
         {
-            ans[i]++;
+            ans[i%7]++;
         }
         for(int i=0;i<7;i++)
         {
