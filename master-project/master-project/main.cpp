@@ -54,64 +54,53 @@ bool search (string str,trieNode *root)
     }
     return pointer->isLeafNode;
 }
-bool deleteInTrie (string str, trieNode * root, int pos, int len)
+trieNode* deleteInTrie (string str, trieNode * root, int pos, int len)
 {
     if(pos == len)
     {
         root->isLeafNode = false;
-        bool flag = true;
         for(int i=0;i<26;i++)
-        {
             if(root->children[i])
-            {
-                flag = false;
-                break;
-            }
-        }
-        return flag;
+                return root;
+        delete root;
+        return NULL;
     }
-    bool flag = deleteInTrie(str, root->children[str[pos]-'a'], pos+1, len);
-    if(flag)
+    root->children[str[pos]-'a'] = deleteInTrie(str, root->children[str[pos]-'a'], pos+1, len);
+    if(root->children[str[pos]-'a'] == NULL)
     {
-        root->children[str[pos]-'a'] = NULL;
-        bool tempFlag = true;
         for(int i=0;i<26;i++)
-        {
             if(root->children[i])
-            {
-                tempFlag = false;
-                break;
-            }
-        }
-        return tempFlag;
+                return root;
+        delete root;
+        return NULL;
     }
     else
     {
-        return flag;
+        return root;
     }
 }
 
 int main(){
     freopen("/Users/mithoonkumar/Documents/ds-algo-code/ds-algo-code/master-project/master-project/input.txt","r",stdin);
     faster;
-    trieNode node;
+    trieNode *node = new trieNode();
     for(int i=0;i<7;i++)
     {
         string str;
         cin>>str;
-        insert(str, &node);
+        insert(str, node);
     }
     for(int i=0;i<2;i++)
     {
         string str;
         cin>>str;
-        deleteInTrie(str, &node, 0, str.length());
+        node = deleteInTrie(str, node, 0, str.length());
     }
     for(int i=0;i<7;i++)
     {
         string str;
         cin>>str;
-        cout<<search(str, &node)<<endl;
+        cout<<search(str, node)<<endl;
     }
     return 0;
 }
