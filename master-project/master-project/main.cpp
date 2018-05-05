@@ -19,7 +19,7 @@ using namespace std;
 int main(){
     freopen("/Users/mithoonkumar/Documents/ds-algo-code/ds-algo-code/master-project/master-project/input.txt","r",stdin);
     faster;
-    
+    cout<<10;
     
     return 0;
 }
