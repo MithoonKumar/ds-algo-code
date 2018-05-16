@@ -1,68 +1,115 @@
-
-//freopen("/Users/mithoonkumar/Documents/personal-github-repo/ds-algo-code/ds-algo-code/master-project/master-project/input.txt","r",stdin);
-
-#include <iostream>
-#include <vector>
-#include <string.h>
-/*    .___.
- /     \
- | O _ O |
- /  \_/  \
- .' /     \ `.
- / _|       |_ \
- (_/ |       | \_)
- \       /
- __\_>-<_/__
- ~;/     \;~     */
-
-
-#define float double
-#define debug(x) (cerr << #x << ": " << (x) << endl)
-
-#define int long long
-
-typedef long long ll;
-
+#include<iostream>
+#include<vector>
+#include<algorithm>
+#include<string>
+#include<map>
+#include<queue>
+#include<stack>
+#include<math.h>
+#include<list>
+#include<set>
+#include<unordered_map>
+#include<sstream>
+#include<limits.h>
+#include<stdio.h>
 using namespace std;
+#define faster  ios_base::sync_with_stdio(false); cin.tie(NULL)
 
-int n, m;
-vector<string> field;
 
-int countBombs(int r, int c) {
-    int result = 0;
-    if (r > 0 && c > 0 && field[r-1][c-1] == '*') result++;
-    if (r > 0 && field[r-1][c] == '*') result++;
-    if (r > 0 && c < m-1 && field[r-1][c+1] == '*') result++;
-    if (c > 0 && field[r][c-1] == '*') result++;
-    if (c < m-1 && field[r][c+1] == '*') result++;
-    if (r < n-1 && c > 0 && field[r+1][c-1] == '*') result++;
-    if (r < n-1 && field[r+1][c] == '*') result++;
-    if (r < n-1 && r < m-1 && field[r+1][c+1] == '*') result++;
-    return result;
-}
-
-int32_t main() {
-    freopen("/Users/mithoonkumar/Documents/personal-github-repo/ds-algo-code/ds-algo-code/master-project/master-project/input.txt","r",stdin);
-    cin >> n >> m;
-    string row;
-    for (int i = 0; i < n; i++) {
-        cin >> row;
-        field.push_back(row);
+int main(){
+    //freopen("/Users/mithoonkumar/Documents/personal-github-repo/ds-algo-code/ds-algo-code/master-project/master-project/input.txt","r",stdin);
+    faster;
+    int n,m;
+    cin>>n>>m;
+    char arr[102][102];
+    char dupArr[102][102];
+    for(int i=1;i<=n;i++)
+    {
+        for(int j=1;j<=n;j++)
+        {
+            cin>>arr[i][j];
+            dupArr[i][j] = arr[i][j];
+            if(dupArr[i][j] != '*')
+            {
+                dupArr[i][j] = '0';
+            }
+        }
     }
-    for (int r = 0; r < n; r++) {
-        for (int c = 0; c < m; c++) {
-            if (field[r][c] == '.') {
-                if (countBombs(r, c) != 0) {
-                    cout << "NO\n"; return 0;
-                }
-            } else if (field[r][c] == '*') {
-                
-            } else {
-                if (countBombs(r, c) != field[r][c] - '0') {
-                    cout << "NO\n"; return 0;
+    for(int i=1;i<=n;i++)
+    {
+        for(int j=1;j<=n;j++)
+        {
+            if(dupArr[i][j] == '*')
+            {
+                for(int k=i-1;k<=i+1;k++)
+                {
+                    for(int l=j-1;l<=j+1;l++)
+                    {
+                        if((k==i && l==j) || dupArr[k][l] == '*')
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            dupArr[k][l]++;
+                        }
+                    }
                 }
             }
         }
     }
-    cout << "YES\n";
+    bool flag = true;
+    for(int i=1;i<=n;i++)
+    {
+        for(int j=1;j<=n;j++)
+        {
+            if(dupArr[i][j] == '0')
+            {
+                dupArr[i][j] = '.';
+            }
+            if(dupArr[i][j]!=arr[i][j])
+            {
+                flag = false;
+            }
+        }
+    }
+    /*
+    for(int i=1;i<=n;i++)
+    {
+        for(int j=1;j<=n;j++)
+        {
+            cout<<arr[i][j];
+        }
+        cout<<endl;
+    }
+    cout<<endl;
+    for(int i=1;i<=n;i++)
+    {
+        for(int j=1;j<=n;j++)
+        {
+            cout<<dupArr[i][j];
+        }
+        cout<<endl;
+    }
+    cout<<endl;
+    for(int i=1;i<=n;i++)
+    {
+        for(int j=1;j<=n;j++)
+        {
+            cout<<dupArr[i][j]-arr[i][j];
+        }
+        cout<<endl;
+    }*/
+    
+    if(flag)
+    {
+        cout<<"YES"<<endl;
+    }
+    else
+    {
+        cout<<"NO"<<endl;
+    }
+    
+    return 0;
 }
+
