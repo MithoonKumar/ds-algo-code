@@ -17,98 +17,9 @@ using namespace std;
 
 
 int main(){
-    //freopen("/Users/mithoonkumar/Documents/personal-github-repo/ds-algo-code/ds-algo-code/master-project/master-project/input.txt","r",stdin);
+    freopen("/Users/mithoonkumar/Documents/ds-algo-code/ds-algo-code/master-project/master-project/input.txt","r",stdin);
     faster;
-    int n,m;
-    cin>>n>>m;
-    char arr[102][102];
-    char dupArr[102][102];
-    for(int i=1;i<=n;i++)
-    {
-        for(int j=1;j<=n;j++)
-        {
-            cin>>arr[i][j];
-            dupArr[i][j] = arr[i][j];
-            if(dupArr[i][j] != '*')
-            {
-                dupArr[i][j] = '0';
-            }
-        }
-    }
-    for(int i=1;i<=n;i++)
-    {
-        for(int j=1;j<=n;j++)
-        {
-            if(dupArr[i][j] == '*')
-            {
-                for(int k=i-1;k<=i+1;k++)
-                {
-                    for(int l=j-1;l<=j+1;l++)
-                    {
-                        if((k==i && l==j) || dupArr[k][l] == '*')
-                        {
-                            continue;
-                        }
-                        else
-                        {
-                            dupArr[k][l]++;
-                        }
-                    }
-                }
-            }
-        }
-    }
-    bool flag = true;
-    for(int i=1;i<=n;i++)
-    {
-        for(int j=1;j<=n;j++)
-        {
-            if(dupArr[i][j] == '0')
-            {
-                dupArr[i][j] = '.';
-            }
-            if(dupArr[i][j]!=arr[i][j])
-            {
-                flag = false;
-            }
-        }
-    }
-    /*
-    for(int i=1;i<=n;i++)
-    {
-        for(int j=1;j<=n;j++)
-        {
-            cout<<arr[i][j];
-        }
-        cout<<endl;
-    }
-    cout<<endl;
-    for(int i=1;i<=n;i++)
-    {
-        for(int j=1;j<=n;j++)
-        {
-            cout<<dupArr[i][j];
-        }
-        cout<<endl;
-    }
-    cout<<endl;
-    for(int i=1;i<=n;i++)
-    {
-        for(int j=1;j<=n;j++)
-        {
-            cout<<dupArr[i][j]-arr[i][j];
-        }
-        cout<<endl;
-    }*/
     
-    if(flag)
-    {
-        cout<<"YES"<<endl;
-    }
-    else
-    {
-        cout<<"NO"<<endl;
-    }
     
     return 0;
 }
