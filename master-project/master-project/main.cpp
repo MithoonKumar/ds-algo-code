@@ -15,133 +15,109 @@
 using namespace std;
 #define faster  ios_base::sync_with_stdio(false); cin.tie(NULL)
 
-void swap(int firstIndex, int secondIndex, vector<int>&vec, vector<bool>&flag)
+void doFakeBinarySearch(int pos,vector<int>&unsortedVec, int start, int end, vector<int>&mismatchedSmall, vector<int>&mismatchedBig, vector<int>&matchedSmall, vector<int>&matchedBig)
 {
-    int temp = vec[firstIndex];
-    vec[firstIndex] = vec[secondIndex];
-    vec[secondIndex] = temp;
-    flag[firstIndex] = true;
-    flag[secondIndex] = true;
-}
-
-int leftIndex(vector<int>vec, vector<bool>flag, int index, int num)
-{
-    int minIndex = -1;
-    int minValue = num;
-    for(int i = 0; i <index-1; i++)
+    int mid = (start + end) /2;
+    if (mid == pos)
     {
-        if(flag[i] && vec[i]<minValue)
-        {
-            minValue = vec[i];
-            minIndex = i;
-        }
+        return ;
     }
-    return minIndex;
-}
-
-int rightIndex(vector<int>vec, vector<bool>flag, int index, int num)
-{
-    int maxIndex = -1;
-    int maxValue = num;
-    for(int i=(int)(vec.size()-1); i>index; i--)
+    else if (mid > pos)
     {
-        if(!flag[i] && vec[i]>maxValue)
+        if(unsortedVec[mid]>unsortedVec[pos])
         {
-            maxValue = vec[i];
-            maxIndex = i;
+            matchedBig.push_back(unsortedVec[mid]);
         }
+        else if (unsortedVec[mid]<unsortedVec[pos])
+        {
+            mismatchedSmall.push_back(unsortedVec[mid]);
+        }
+        doFakeBinarySearch(pos, unsortedVec, start, mid-1, mismatchedSmall, mismatchedBig, matchedSmall, matchedBig);
     }
-    return maxIndex;
-}
-
-int findMinNumberOfSwaps(vector<int>vec, int num, int pos)
-{
-    vector<bool>flag(vec.size(), false);
-    int low, high, mid;
-    low = 0;
-    int count = 0;
-    high = (int)(vec.size()-1);
-    while(low <= high)
+    else
     {
-        mid = (low + high) / 2;
-        if (vec[mid] == num)
+        if(unsortedVec[mid]<unsortedVec[pos])
         {
-            return count;
+            matchedSmall.push_back(unsortedVec[mid]);
         }
-        bool direction; //direction to be moved ,true for right and false for left
-        if (pos > mid)
+        else if (unsortedVec[mid]>unsortedVec[pos])
         {
-            direction = true;
+            mismatchedBig.push_back(unsortedVec[mid]);
         }
-        else
-        {
-            direction =false;
-        }
-        
-        if (vec[mid] < num && direction)
-        {
-            low = mid+1;
-            flag[mid] = true;
-        }
-        else if(vec[mid] > num && !direction)
-        {
-            high = mid-1;
-            flag[mid] = true;
-        }
-        else if(direction)
-        {
-            int nextIndex = leftIndex(vec, flag, mid, num);
-            if (nextIndex == -1)
-            {
-                return -1;
-            }
-            swap(mid, nextIndex, vec, flag);
-            count++;
-            low = mid+1;
-        }
-        else
-        {
-            int prevIndex = rightIndex(vec, flag, mid, num);
-            if (prevIndex == -1)
-            {
-                return -1;
-            }
-            swap(mid, prevIndex, vec, flag);
-            count++;
-            high = mid -1;
-        }
-        
+        doFakeBinarySearch(pos, unsortedVec, mid+1, end, mismatchedSmall, mismatchedBig, matchedSmall, matchedBig);
     }
-    return count;
-    
+
 }
 
 int main(){
-    freopen("/Users/mithoonkumar/Documents/personal-github-repo/ds-algo-code/ds-algo-code/master-project/master-project/input.txt","r",stdin);
+    //freopen("/Users/mithoonkumar/Documents/personal-github-repo/ds-algo-code/ds-algo-code/master-project/master-project/input.txt","r",stdin);
     faster;
     int t;
     cin>>t;
-    for(int tc=0;tc<t;tc++)
-    {
+    while(t--){
         int n,q;
         cin>>n>>q;
-        vector<int>vec;
-        unordered_map<int, int>hashMap;
-        for(int i=0;i<n;i++)
+        vector<int>unsortedVec;
+        for(int i=0; i<n; i++)
         {
             int num;
             cin>>num;
-            vec.push_back(num);
-            hashMap[num] = i;
+            unsortedVec.push_back(num);
         }
-        for(int i=0;i<q;i++)
+        vector<int>sorted;
+        for(int i=0; i<n; i++)
+        {
+            sorted.push_back(unsortedVec[i]);
+        }
+        sort(sorted.begin(), sorted.end());
+        unordered_map<int, int>sortedPositions, unsortedPositions;
+        for(int i=0; i<n; i++)
+        {
+            sortedPositions[sorted[i]] = i;
+            unsortedPositions[unsortedVec[i]] = i;
+        }
+        for(int i=0; i<q; i++)
         {
             int num;
             cin>>num;
-            cout<<findMinNumberOfSwaps(vec, num, hashMap[num])<<endl;
+            int count = 0;
+            int pos = unsortedPositions[num];
+            vector<int>mismatchedSmall, mismatchedBig, matchedSmall, matchedBig;
+            doFakeBinarySearch(pos, unsortedVec, 0, unsortedVec.size()-1, mismatchedSmall, mismatchedBig, matchedSmall, matchedBig);
+            int posOfQuerriedNum = sortedPositions[num];
+            if (mismatchedSmall.size()>mismatchedBig.size())
+            {
+                int someCount = n - sortedPositions[num] - 1;
+                if (someCount< (mismatchedBig.size() + matchedBig.size() + mismatchedSmall.size() -mismatchedBig.size()))
+                {
+                    cout<<-1<<endl;
+                }
+                else
+                {
+                    cout<<mismatchedSmall.size()<<endl;
+                }
+            }
+            else if (mismatchedSmall.size()<mismatchedBig.size())
+            {
+                int someCount = sortedPositions[num];
+                if (someCount< (mismatchedSmall.size() + matchedSmall.size() + mismatchedBig.size() -mismatchedSmall.size()))
+                {
+                    cout<<-1<<endl;
+                }
+                else
+                {
+                    cout<<mismatchedBig.size()<<endl;
+                }
+            }
+            else
+            {
+                cout<<mismatchedBig.size()<<endl;
+            }
         }
+        
+        
+        
     }
-    
     return 0;
 }
 
