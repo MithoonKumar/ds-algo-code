@@ -22,7 +22,7 @@ int main(){
 
     string str;
     cin>>str;
-    if(str.length()<=2)
+    if(str.length()<=2) 
     {
         cout<<"No"<<endl;
     }
