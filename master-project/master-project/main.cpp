@@ -17,10 +17,43 @@ using namespace std;
 
 
 int main(){
-    freopen("/Users/mithoonkumar/Documents/ds-algo-code/ds-algo-code/master-project/master-project/input.txt","r",stdin);
+    freopen("/Users/mithoonkumar/Documents/personal-github-repo/ds-algo-code/ds-algo-code/master-project/master-project/input.txt","r",stdin);
     faster;
+
+    string str;
+    cin>>str;
+    if(str.length()<=2)
+    {
+        cout<<"No"<<endl;
+    }
+    else
+    {
+        bool flag = false;
+        for(int i=1;i<=str.length()-2;i++)
+        {
+            unordered_map<char, bool>map;
+            map[str[i-1]] = true;
+            map[str[i]] = true;
+            map[str[i+1]] = true;
+            if(map.size() == 3)
+            {
+                int sum = 0;
+                for (std::unordered_map<char,bool>::iterator it=map.begin(); it!=map.end(); ++it)
+                {
+                    sum+=(it->first);
+                }
+                if(sum == 3*'B')
+                {
+                    flag = true;
+                    cout<<"Yes"<<endl;
+                    break;
+                }
+            }
+        }
+        if (!flag)
+        cout<<"No"<<endl;
+    }
     
-    
-    return 0;
+
 }
 
