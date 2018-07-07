@@ -15,36 +15,29 @@
 using namespace std;
 #define faster  ios_base::sync_with_stdio(false); cin.tie(NULL)
 
-void printPermutations(string str, string temp, int tempLength, int length, bool visited[3])
+void printnC2(string str, string temp, int index, int combinationLength)
 {
-    if(tempLength == length)
+    if(temp.length() == combinationLength)
     {
         cout<<temp<<endl;
+        return;
     }
-    for(int i=0;i<length;i++)
+    if (index == str.length())
     {
-        if(!visited[i])
-        {
-            temp[tempLength] = str[i];
-            visited[i] = true;
-            printPermutations(str, temp, tempLength+1, length, visited);
-            visited[i] = false;
-        }
+        return;
     }
+    
+        temp.push_back(str[index]);
+        printnC2(str, temp, index+1, combinationLength);
+        temp.pop_back();
+        printnC2(str, temp, index+1, combinationLength);
 }
 
 int main(){
     //freopen("/Users/mithoonkumar/Documents/ds-algo-code/ds-algo-code/master-project/master-project/input.txt","r",stdin);
     faster;
-    string str;
-    str = "abc";
-    string temp="...";
-    bool visited[3] ;
-    for(int i=0;i<3;i++)
-    {
-        visited[i] = false;
-    }
-    printPermutations(str, temp, 0, 3, visited);
-    return 0;
+    string str="abcd", temp;
+    printnC2(str, temp, 0, 2);
+    
 }
 
