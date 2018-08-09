@@ -1,0 +1,7 @@
+3
+bob
+rob
+dbc
+ocb
+boc
+obc
