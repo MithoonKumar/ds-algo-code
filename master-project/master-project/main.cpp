@@ -17,9 +17,29 @@ using namespace std;
 
 
 int main(){
-    freopen("/Users/mithoonkumar/Documents/ds-algo-code/ds-algo-code/master-project/master-project/input.txt","r",stdin);
+    freopen("/Users/mithoonkumar/Documents/personal-github-repo/ds-algo-code/ds-algo-code/master-project/master-project/input.txt","r",stdin);
     faster;
-    
+    int t;
+    cin>>t;
+    string str;
+    while(t--){
+        char c;
+        cin>>c;
+        str.push_back(c);
+    }
+    if (str.length() == 1) {
+        cout<<"Yes"<<endl;
+    } else {
+        unordered_map<char, int> unorderedMap;
+        for (int i=0; i<str.length(); i++) {
+            unorderedMap[str[i]]++;
+        }
+        if (unorderedMap.size() == str.length()) {
+            cout<<"No"<<endl;
+        } else {
+            cout<<"Yes"<<endl;
+        }
+    }
     
     return 0;
 }
