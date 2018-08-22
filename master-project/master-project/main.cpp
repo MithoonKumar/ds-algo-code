@@ -15,39 +15,23 @@
 using namespace std;
 #define faster  ios_base::sync_with_stdio(false); cin.tie(NULL)
 
-long long findHCF (long long first, long long second) {
-    long long dividend = first;
-    long long divisor = second;
-    long long quotient, remainder;
-    while (1) {
-        quotient = dividend / divisor;
-        remainder = (dividend % divisor);
-        if (remainder == 0)
-            return divisor;
-        dividend = divisor;
-        divisor = remainder;
-    }
-}
-
-long long findGcd(long long a, long long b)
-{
-    if (a == 0)
-        return b;
-    return findGcd(b % a, a);
-}
-
-long long findFirstPrimeFactor(long long num) {
-    if ((num%2) == 0) {
-        return 2;
-    } else {
-        for (long long i = 3; i <= sqrt((double) num); i = i+2 ) {
-            if ((num%i) == 0 ){
-                return i;
-            }
-        }
+vector<long long> findAllPrimes (long long num) {
+    vector<long long>primes;
+    while ((num%2) == 0) {
+        primes.push_back(2);
+        num/=2;
     }
     
-    return num;
+    for (long long i = 3; i <= sqrt((double)num); i = i+2) {
+        while ((num%i) == 0) {
+            primes.push_back(i);
+            num/=i;
+        }
+    }
+    if (num>2) {
+        primes.push_back(num);
+    }
+    return primes;
 }
 
 int main(){
@@ -55,22 +39,50 @@ int main(){
     faster;
     long long n;
     cin>>n;
-    //n = 1000;
-    vector<long long> vec;
-    for (long long i = 0; i < n; i++) {
+    vector<vector<long long> >tuples;
+    for(long long i = 0; i < n; i++) {
+        vector<long long>tuple;
         long long num1, num2;
         cin>>num1>>num2;
-        vec.push_back(num1*num2);
+        tuple.push_back(num1);
+        tuple.push_back(num2);
+        tuples.push_back(tuple);
     }
-    sort(vec.begin(), vec.end());
-    long long gcd = vec[0];
-    for (long long i = 0; i < n-1; i++) {
-        gcd = findHCF(gcd, vec[i+1]);
+    vector<long long> primeFactors1 = findAllPrimes(tuples[0][0]);
+    vector<long long> primeFactors2 = findAllPrimes(tuples[0][1]);
+    unordered_map<long long, bool> firstMap, secondMap;
+    for (long long i = 0; i < primeFactors1.size(); i++) {
+        firstMap[primeFactors1[i]] = true;
     }
-    if (gcd == 1) {
+    for (long long i = 0; i < primeFactors2.size(); i++) {
+        secondMap[primeFactors2[i]] = true;
+    }
+    vector<long long> commonFactors;
+    for ( auto it = firstMap.begin(); it != firstMap.end(); ++it ) {
+        commonFactors.push_back(it->first);
+    }
+    for ( auto it = secondMap.begin(); it != secondMap.end(); ++it ) {
+        commonFactors.push_back(it->first);
+    }
+    bool answerFlag = false;
+    for (long long i = 0; i < commonFactors.size(); i++) {
+        long long testNum = commonFactors[i];
+        bool flag = true;
+        for (long long j = 0; j < n; j++) {
+            if (!((tuples[j][0]%testNum) == 0 || (tuples[j][1]%testNum) == 0 )) {
+                flag = false;
+                break;
+            }
+        }
+        if (flag) {
+            cout<<testNum<<endl;
+            answerFlag = true;
+            break;
+        }
+    }
+    
+    if (!answerFlag) {
         cout<<-1<<endl;
-    } else {
-        cout<<findFirstPrimeFactor(gcd)<<endl;
     }
     return 0;
 }
